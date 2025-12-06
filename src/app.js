@@ -1,5 +1,5 @@
-import express from "express";
-import routers from "./routers/index.router";
+import express, { json } from "express";
+import routers from "./routers/index.router.js";
 
 const app = express();
 
