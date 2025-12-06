@@ -1,11 +1,12 @@
 import express from "express";
-import productRouter from "./routers/product.router.js";
+import routers from "./routers/index.router";
 
 const app = express();
 
 app
     .set("views", "src/views")
     .set("view engine", "hbs")
-    .use(productRouter);
+    .use(json())
+    .use(routers);
 
 export default app;

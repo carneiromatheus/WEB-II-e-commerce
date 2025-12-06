@@ -3,6 +3,7 @@ import productRouter from "./product.router.js";
 
 const routers = Router();
 
-routers.use(productRouter);
+routers
+    .use(productRouter);
 
 export default routers;
