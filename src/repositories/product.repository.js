@@ -8,7 +8,7 @@ async function getDBProductById(productId) {
         [productId]
     );
 
-    return queryResult.rows[0];
+    return queryResult.rows[0] ?? {};
 };
 
 export const productRepository = {
