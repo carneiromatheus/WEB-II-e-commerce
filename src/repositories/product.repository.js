@@ -1,15 +1,14 @@
-function getDBProductById(productId) {
-    // TODO: Alterar para a query real do banco de dados
-    const products = [
-        { id: 0, name: "Cachaça Claudionor", price: "R$ 90,00" },
-        { id: 1, name: "Carne seca", price: "R$ 55,00 (kg)" }
-    ];
+import { db } from "../config/db.connection.js";
 
-    const product = products.find(product => {
-        return product.id === productId;
-    });
+async function getDBProductById(productId) {
+    const queryResult = await db.query(
+        `SELECT *
+        FROM products
+        WHERE id = $1`,
+        [productId]
+    );
 
-    return product;
+    return queryResult.rows[0];
 };
 
 export const productRepository = {
