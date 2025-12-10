@@ -15,7 +15,7 @@ async function findProduct(req, res) {
             const product = await findProductById(productId);
 
             // FIX: Ajustar retorno quando implementar outros critérios de busca. Retorno único.
-            return res.status(200).send(product);
+            return res.status(200).render("product", { product });
         };
 
         // TODO: Caso não tenha id, buscar por outros critérios (nome, categoria, etc);

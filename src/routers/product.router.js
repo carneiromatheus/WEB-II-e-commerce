@@ -4,6 +4,6 @@ import { productController } from "../controllers/product.controller.js";
 const productRouter = Router();
 
 productRouter
-    .get("/api/product", productController.findProduct);
+    .get("/product", productController.findProduct);
 
 export default productRouter;
