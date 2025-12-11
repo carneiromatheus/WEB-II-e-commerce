@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Estoque: {{product.name}}</title>
+    <style>
+        .box { border: 1px solid #ccc; padding: 15px; margin: 10px 0; }
+        .entry { color: green; }
+        .exit { color: red; }
+    </style>
+</head>
+<body>
+    <a href="/seller/dashboard">← Voltar para Painel</a>
+    
+    <h1>Gerenciar Estoque: {{product.name}}</h1>
+    
+    <div class="box" style="background: #f9f9f9;">
+        <h2>Saldo Atual: <strong>{{currentStock}}</strong> unidades</h2>
+    </div>
+
+    <div class="box">
+        <h3>Registrar Movimentação</h3>
+        <form action="/seller/stock/add" method="POST">
+            <input type="hidden" name="productId" value="{{product.id}}">
+            
+            <label>Tipo:</label>
+            <select name="type">
+                <option value="entry">🟢 Entrada (Compra/Produção)</option>
+                <option value="exit">🔴 Saída (Perda/Retirada)</option>
+            </select>
+
+            <label>Quantidade:</label>
+            <input type="number" name="quantity" min="1" required>
+
+            <button type="submit">Atualizar</button>
+        </form>
+    </div>
+
+    <h3>Histórico de Movimentações</h3>
+    <ul>
+        {{#each history}}
+            <li>
+                {{formatDate this.movement_date}} — 
+                {{#if (checkPositive this.quantity)}}
+                    <span class="entry">Entrada: +{{this.quantity}}</span>
+                {{else}}
+                    <span class="exit">Saída: {{this.quantity}}</span>
+                {{/if}}
+            </li>
+        {{else}}
+            <p>Nenhuma movimentação registrada.</p>
+        {{/each}}
+    </ul>
+</body>
+</html>

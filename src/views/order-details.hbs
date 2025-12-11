@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalhes do Pedido #{{order.id}}</title>
+</head>
+<body>
+    <h1>Pedido #{{order.id}}</h1>
+    <p>Data: {{formatDate order.order_date}}</p>
+    <a href="/my-orders">← Voltar para Meus Pedidos</a>
+
+    <h3>Itens Comprados:</h3>
+    <ul>
+        {{#each order.items}}
+        <li style="margin-bottom: 10px; border-bottom: 1px dashed #eee; padding-bottom: 5px;">
+            <strong>{{this.product_name}}</strong> <br>
+            Quantidade: {{this.quantity}} x R$ {{this.price}} <br>
+            {{#if this.photo_url}}
+                <img src="{{this.photo_url}}" width="50">
+            {{/if}}
+        </li>
+        {{/each}}
+    </ul>
+
+    <h3>Total Pago: R$ {{order.total}}</h3>
+</body>
+</html>

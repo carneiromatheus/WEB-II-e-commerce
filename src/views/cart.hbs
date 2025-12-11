@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Seu Carrinho</title>
+    <style>
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 10px; border-bottom: 1px solid #ddd; text-align: left; }
+        .actions form { display: inline; }
+    </style>
+</head>
+<body>
+    <h1>Seu Carrinho de Compras</h1>
+    <a href="/">← Continuar Comprando</a>
+
+    {{#if cart.length}}
+        <table>
+            <thead>
+                <tr>
+                    <th>Produto</th>
+                    <th>Preço Unit.</th>
+                    <th>Qtd.</th>
+                    <th>Subtotal</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each cart}}
+                <tr>
+                    <td>{{this.name}}</td>
+                    <td>R$ {{this.price}}</td>
+                    <td>
+                        <form action="/cart/update" method="POST" class="ajax-form">
+                            <input type="hidden" name="productId" value="{{this.id}}">
+                            <input type="hidden" name="action" value="decrease">
+                            <button type="submit">-</button>
+                        </form>
+                        
+                        <span id="qtd-{{this.id}}">{{this.quantity}}</span>
+                        
+                        <form action="/cart/update" method="POST" class="ajax-form">
+                            <input type="hidden" name="productId" value="{{this.id}}">
+                            <input type="hidden" name="action" value="increase">
+                            <button type="submit">+</button>
+                        </form>
+                    </td>
+                    <td>R$ <span id="subtotal-{{this.id}}">{{multiply this.price this.quantity}}</span></td>
+                    <td>
+                        <form action="/cart/remove" method="POST" class="ajax-form">
+                            <input type="hidden" name="productId" value="{{this.id}}">
+                            <button type="submit" style="color: red;">Remover</button>
+                        </form>
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+
+        <h2 style="text-align: right;">Total: R$ <span id="cart-total">{{total}}</span></h2>
+        
+        <div style="text-align: right;">
+            <form action="/checkout" method="POST">
+                <button type="submit" style="font-size: 20px; padding: 10px;">Finalizar Compra</button>
+            </form>
+        </div>
+
+    {{else}}
+        <p>Seu carrinho está vazio.</p>
+    {{/if}}
+
+    <script>
+        document.querySelectorAll('.ajax-form').forEach(form => {
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                const actionUrl = form.action;
+                const formData = new FormData(form);
+                const data = Object.fromEntries(formData);
+
+                try {
+                    const response = await fetch(actionUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                        body: JSON.stringify(data)
+                    });
+
+                    const result = await response.json();
+                    
+                    if (result.success) {
+                        // Atualiza a tela dinamicamente sem recarregar (AJAX)
+                        if (result.action === 'remove') {
+                            form.closest('tr').remove(); // Remove a linha da tabela
+                        } else {
+                            // Atualiza quantidade e subtotal
+                            document.getElementById(`qtd-${data.productId}`).innerText = result.newQuantity;
+                            // Se a quantidade for 0, removemos a linha visualmente
+                            if (result.newQuantity === 0) form.closest('tr').remove();
+                        }
+                        // Atualiza o Total Geral
+                        document.getElementById('cart-total').innerText = result.cartTotal;
+                    }
+                } catch (err) {
+                    console.error("Erro AJAX, fallback...", err);
+                    form.submit(); // Fallback
+                }
+            });
+        });
+    </script>
+</body>
+</html>

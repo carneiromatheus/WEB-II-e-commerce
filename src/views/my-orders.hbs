@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Meus Pedidos</title>
+    <style>table { width: 100%; border-collapse: collapse; } th, td { padding: 10px; border-bottom: 1px solid #ccc; text-align: left; }</style>
+</head>
+<body>
+    <h1>Meus Pedidos</h1>
+    <a href="/">← Voltar para a Loja</a>
+
+    {{#if orders.length}}
+        <table>
+            <thead>
+                <tr>
+                    <th>Pedido #</th>
+                    <th>Data</th>
+                    <th>Total</th>
+                    <th>Detalhes</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each orders}}
+                <tr>
+                    <td>{{this.id}}</td>
+                    <td>{{formatDate this.order_date}}</td>
+                    <td>R$ {{this.total}}</td>
+                    <td><a href="/my-orders/{{this.id}}">Ver Itens</a></td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    {{else}}
+        <p>Você ainda não fez nenhum pedido.</p>
+    {{/if}}
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Painel do Vendedor</title>
+    <style>
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        .btn-new { background-color: #4CAF50; color: white; padding: 10px 20px; text-decoration: none; border-radius: 4px;}
+    </style>
+</head>
+<body>
+    <h1>Área do Vendedor</h1>
+    <p>Bem-vindo, {{user.name}}! <a href="/">Ir para Loja</a></p>
+    
+    <div style="margin: 20px 0;">
+        <a href="/seller/new" class="btn-new">+ Novo Produto</a>
+    </div>
+
+    <h2>Seus Produtos Cadastrados</h2>
+    
+    {{#if products.length}}
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Imagem</th>
+                    <th>Nome</th>
+                    <th>Preço</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each products}}
+                <tr>
+                    <td>{{this.id}}</td>
+                    <td>
+                        {{#if this.photo_url}}
+                            <img src="{{this.photo_url}}" width="50">
+                        {{else}}
+                            -
+                        {{/if}}
+                    </td>
+                    <td>{{this.name}}</td>
+                    <td>R$ {{this.price}}</td>
+                    <td>
+                        <a href="#">Editar</a> | 
+                        <a href="/seller/stock/{{this.id}}">Estoque</a>
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    {{else}}
+        <p>Você ainda não tem produtos cadastrados.</p>
+    {{/if}}
+</body>
+</html>

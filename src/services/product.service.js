@@ -6,6 +6,14 @@ async function getProductById(id) {
     return product;
 };
 
+// --- NOVA FUNÇÃO ---
+async function getAllProducts(filters) {
+    // Repassa os filtros (busca, categoria, ordenação) para o repositório
+    // Se não tiver filtros, passa um objeto vazio
+    return await productRepository.getDBProducts(filters || {});
+};
+
 export const productService = {
     getProductById,
+    getAllProducts // <--- Não esqueça de exportar aqui
 };

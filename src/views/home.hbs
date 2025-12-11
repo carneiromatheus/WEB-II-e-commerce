@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Minha Loja</title>
+    <style>
+        .product-card { border: 1px solid #ddd; padding: 10px; margin: 10px; display: inline-block; width: 200px; }
+        .header { background: #f4f4f4; padding: 10px; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        {{#if user}}
+            <span>Olá, <strong>{{user.name}}</strong>!</span>
+            
+            <a href="/my-orders" style="margin-left: 15px; text-decoration: none; color: blue;">📦 Meus Pedidos</a>
+            
+            <a href="/logout" style="margin-left: 15px; color: red;">Sair</a>
+        {{else}}
+            <a href="/login">Entrar</a>
+            <a href="/register">Cadastrar</a>
+        {{/if}}
+        
+        <a href="/cart" style="float: right; text-decoration: none; font-size: 18px;">
+            🛒 Carrinho {{#if cart}}({{cart.length}}){{/if}}
+        </a>
+    </div>
+
+    <h1>Produtos em Destaque</h1>
+
+    <div class="products-container">
+        {{#each products}}
+            <div class="product-card">
+                {{#if this.photo_url}}
+                    <img src="{{this.photo_url}}" alt="{{this.name}}" width="100%">
+                {{/if}}
+
+                <h3>{{this.name}}</h3>
+                <p>{{this.description}}</p>
+                <p><strong>R$ {{this.price}}</strong></p>
+
+                <a href="/product/{{this.id}}">Ver Detalhes</a>
+            </div>
+        {{else}}
+            <p>Nenhum produto cadastrado ainda.</p>
+        {{/each}}
+    </div>
+</body>
+</html>

@@ -1,33 +1,32 @@
 import { productService } from "../services/product.service.js";
 
-async function findProductById(productId) {
-    const product = await productService.getProductById(productId);
-    return product;
-};
+async function listProducts(req, res) {
+    try {
+        // Busca os produtos do banco (se tiver filtros, passa aqui)
+        const products = await productService.getAllProducts({}); 
+
+        // Renderiza a view 'home.hbs' passando os produtos e a sessão do usuário
+        res.render("home", { 
+            products: products,
+            user: req.session.user // Para mostrar "Olá, João" na tela
+        });
+    } catch (error) {
+        console.error(error);
+        res.render("error", { message: "Erro ao carregar produtos" });
+    }
+}
 
 async function findProduct(req, res) {
-
+    const { id } = req.params;
     try {
-        const { id } = req.query;
-
-        if (id) {
-            const productId = parseInt(id, 10);
-            const product = await findProductById(productId);
-
-            // FIX: Ajustar retorno quando implementar outros critérios de busca. Retorno único.
-            return res.status(200).render("product", { product });
-        };
-
-        // TODO: Caso não tenha id, buscar por outros critérios (nome, categoria, etc);
-        // TODO: Caso não tenha critérios, retornar todos os produtos (com paginação).
-        // FIX: Remover retorno de erro quando implementar os outros critérios.
-
-        res.status(400).send({ message: "Insufficient search parameters." });
+        const product = await productService.getProductById(id);
+        res.render("product-detail", { product, user: req.session.user });
     } catch (error) {
-        res.status(500).send({ message: "Internal server error." });
-    };
-};
+        res.render("error", { message: "Produto não encontrado" });
+    }
+}
 
 export const productController = {
+    listProducts,
     findProduct
 };

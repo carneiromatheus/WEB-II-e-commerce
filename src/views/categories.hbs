@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Gerenciar Categorias</title>
+    <style>
+        .container { display: flex; gap: 50px; }
+        .form-section { flex: 1; padding: 20px; background: #f9f9f9; border: 1px solid #ddd; }
+        .list-section { flex: 1; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border-bottom: 1px solid #ddd; padding: 8px; text-align: left; }
+    </style>
+</head>
+<body>
+    <a href="/seller/dashboard">← Voltar para Painel</a>
+    <h1>Gerenciar Categorias</h1>
+
+    <div class="container">
+        <div class="form-section">
+            <h3>Nova Categoria</h3>
+            <form action="/seller/categories" method="POST">
+                <label>Nome da Categoria:</label><br>
+                <input type="text" name="name" required style="width: 100%; margin-bottom: 10px;">
+                
+                <label>Categoria Pai (Opcional):</label><br>
+                <select name="parentId" style="width: 100%; margin-bottom: 10px;">
+                    <option value="">-- Nenhuma (Raiz) --</option>
+                    {{#each categories}}
+                        <option value="{{this.id}}">{{this.name}}</option>
+                    {{/each}}
+                </select>
+
+                <button type="submit" style="width: 100%; padding: 10px; background: #333; color: white;">Criar</button>
+            </form>
+        </div>
+
+        <div class="list-section">
+            <h3>Categorias Existentes</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Pai</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each categories}}
+                    <tr>
+                        <td>{{this.name}}</td>
+                        <td>
+                            {{#if this.parent_name}}
+                                ↳ {{this.parent_name}}
+                            {{else}}
+                                <strong>Raiz</strong>
+                            {{/if}}
+                        </td>
+                    </tr>
+                    {{else}}
+                    <tr><td colspan="2">Nenhuma categoria criada.</td></tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Criar Conta</title>
+</head>
+<body>
+    <h1>Criar Conta</h1>
+
+    {{#if error}}
+        <p style="color: red;">{{error}}</p>
+    {{/if}}
+
+    <form action="/register" method="POST">
+        <div>
+            <label>Nome:</label>
+            <input type="text" name="name" required>
+        </div>
+        <div>
+            <label>E-mail:</label>
+            <input type="email" name="email" required>
+        </div>
+        <div>
+            <label>Senha:</label>
+            <input type="password" name="password" required>
+        </div>
+        
+        <div>
+            <label>Tipo de Conta:</label>
+            <select name="role">
+                <option value="client">Cliente (Comprar)</option>
+                <option value="seller">Vendedor (Vender)</option>
+            </select>
+        </div>
+
+        <button type="submit">Cadastrar</button>
+    </form>
+</body>
+</html>

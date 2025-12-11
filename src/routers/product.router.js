@@ -3,7 +3,10 @@ import { productController } from "../controllers/product.controller.js";
 
 const productRouter = Router();
 
-productRouter
-    .get("/product", productController.findProduct);
+// A rota raiz exibe a lista de produtos (Home)
+productRouter.get("/", productController.listProducts);
+
+// Rota de detalhes
+productRouter.get("/product/:id", productController.findProduct);
 
 export default productRouter;
